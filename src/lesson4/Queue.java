@@ -1,19 +1,26 @@
 package lesson4;
 
-public class Queue {
-    private final LinkedList queue;
-    public Queue(){
-        queue = new LinkedList();
+public class Queue<E> {
+
+    protected final LinkedList<E> queue;
+
+    public Queue() {
+        queue = new LinkedList<>();
     }
+
     public boolean isEmpty(){
         return queue.isEmpty();
     }
-    public void insert(String name, int age){
-        queue.insert(name, age);
+
+    public void insert(E value){
+        queue.insertLast(value);
     }
-    public String delete(){
+
+    public E delete(){
         return queue.delete();
     }
+
+
     public void display(){
         queue.display();
     }
