@@ -4,7 +4,7 @@ public class HomeWorkApp7 {
 
     public static void main(String[] args) {
 
-        Graph graph = new Graph();
+        Graph graph = new Graph(32);
 
         graph.addVertex("Москва"); //0
 
@@ -21,9 +21,9 @@ public class HomeWorkApp7 {
 
         graph.addVertex("Воронеж");//9
 
-        graph.addEdge(0, 1, 10);
+        graph.addEdge(0, 1, 30);
         graph.addEdge(0, 2, 15);
-        graph.addEdge(0, 3, 20);
+        graph.addEdge(0, 3, 10);
 
         graph.addEdge(1, 4, 20);
         graph.addEdge(2, 5, 15);
@@ -34,7 +34,7 @@ public class HomeWorkApp7 {
         graph.addEdge(6, 8, 30);
 
         graph.addEdge(7, 9, 15);
-        graph.addEdge(8, 9, 20);
+        graph.addEdge(8, 9, 30);
 
         graph.dfsFromAToB(0, 9);
 

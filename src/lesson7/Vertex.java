@@ -8,4 +8,11 @@ public class Vertex {
         this.wasVisited = false;
     }
 
+    public String getLabel() {
+        return "{" + label + "} ";
+    }
+
+    public boolean isWasVisited() {
+        return wasVisited;
+    }
 }
