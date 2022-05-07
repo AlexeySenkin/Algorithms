@@ -1,7 +1,11 @@
 
 package lesson8;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class HashTableImpl <K, V> implements HashTable<K, V>{
-    private final Item<K, V>[] data;
+    private final List<Item<K, V>>[] data;
     private final Item<K, V> emptyItem;
     private int size;
 
@@ -36,8 +40,11 @@ public class HashTableImpl <K, V> implements HashTable<K, V>{
     }
 
     public HashTableImpl(int initialCapacity) {
-        this.data = new Item[initialCapacity * 2];
-        emptyItem = new Item<>(null, null);
+        //this.data = new Item[initialCapacity * 2];
+
+        this.data = new List[initialCapacity * 2];
+
+        this.emptyItem = new Item<>(null, null);
     }
 
     public HashTableImpl() {
@@ -51,21 +58,20 @@ public class HashTableImpl <K, V> implements HashTable<K, V>{
         }
 
         int indexFromHashFunc = hashFunc(key);
-        int n = 0;
+            int n = 0;
 
         while (data[indexFromHashFunc] != null && data[indexFromHashFunc] != emptyItem) {
-            if (isKeysEquals(data[indexFromHashFunc], key)) {
-                data[indexFromHashFunc].setValue(value);
-                return true;
-            }
-//            indexFromHashFunc += getStepLinear();
-//            indexFromHashFunc += getStepQuadratic(n++);
-            indexFromHashFunc += getDoubleHash(key);
 
-            indexFromHashFunc %= data.length;
+            if (isKeysEquals(data[indexFromHashFunc].get(0), key)) {
+                data[indexFromHashFunc].get(0).setValue(value);
+            } else {
+                data[indexFromHashFunc].add(new Item<>(key, value));
+            }
+            return true;
         }
 
-        data[indexFromHashFunc] = new Item<>(key, value);
+        data[indexFromHashFunc] = new ArrayList<>();
+        data[indexFromHashFunc].add(new Item<>(key, value));
         size++;
 
         return true;
@@ -97,11 +103,11 @@ public class HashTableImpl <K, V> implements HashTable<K, V>{
 
     @Override
     public V get(K key) {
-        int index = indexOf(key);
-        return index == -1 ? null : data[index].getValue();
+        int[] index = indexOf(key);
+        return index[0] == -1 ? null : data[index[0]].get(index[1]).getValue();
     }
 
-    private int indexOf(K key) {
+    private int[] indexOf(K key) {
         int indexFromHashFunc = hashFunc(key);
 
         int count = 0;
@@ -109,26 +115,27 @@ public class HashTableImpl <K, V> implements HashTable<K, V>{
             if (data[indexFromHashFunc] == null) {
                 break;
             }
-            if (isKeysEquals(data[indexFromHashFunc], key)) {
-                return indexFromHashFunc;
-            }
-            indexFromHashFunc += getDoubleHash(key);
-            indexFromHashFunc %= data.length;
-        }
+            for (int i = 0; i < data[indexFromHashFunc].size(); i++) {
 
-        return -1;
+                if (isKeysEquals(data[indexFromHashFunc].get(i), key)) {
+                    int[] result = {indexFromHashFunc,i};
+                    return result;
+
+                }
+            }
+        }
+        int[] result = {-1,-1};
+        return result;
     }
 
     @Override
     public V remove(K key) {
-        int index = indexOf(key);
-        if (index == -1) {
+        int[] index = indexOf(key);
+        if (index[0] == -1) {
             return null;
         }
-
-        Item<K, V> removed = data[index];
-        data[index] = emptyItem;
-
+        Item<K, V> removed = data[index[0]].get(index[1]);
+        data[index[0]].remove(index[1]);
         return removed.getValue();
     }
 

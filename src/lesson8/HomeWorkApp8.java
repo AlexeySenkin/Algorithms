@@ -20,8 +20,8 @@ public class HomeWorkApp8 {
         System.out.println("Cost banana is " + hashTable.get(new Product(77, "Banana")));
         System.out.println("Cost carrot is " + hashTable.get(new Product(67, "Carrot")));
 
+        System.out.println("Удаляем Potato и Banana");
         hashTable.remove(new Product(21, "Potato"));
-
         hashTable.remove(new Product(77, "Banana"));
 
         System.out.println("Cost potato is " + hashTable.get(new Product(21, "Potato")));
