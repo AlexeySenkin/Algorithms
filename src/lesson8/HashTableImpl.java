@@ -10,6 +10,7 @@ public class HashTableImpl <K, V> implements HashTable<K, V>{
     private int size;
 
     static class Item<K, V> implements Entry<K, V> {
+
         private final K key;
         private V value;
 
@@ -40,10 +41,7 @@ public class HashTableImpl <K, V> implements HashTable<K, V>{
     }
 
     public HashTableImpl(int initialCapacity) {
-        //this.data = new Item[initialCapacity * 2];
-
-        this.data = new List[initialCapacity * 2];
-
+        this.data = new ArrayList[initialCapacity * 2];
         this.emptyItem = new Item<>(null, null);
     }
 
@@ -58,22 +56,20 @@ public class HashTableImpl <K, V> implements HashTable<K, V>{
         }
 
         int indexFromHashFunc = hashFunc(key);
-            int n = 0;
 
-        while (data[indexFromHashFunc] != null && data[indexFromHashFunc] != emptyItem) {
-
-            if (isKeysEquals(data[indexFromHashFunc].get(0), key)) {
-                data[indexFromHashFunc].get(0).setValue(value);
-            } else {
-                data[indexFromHashFunc].add(new Item<>(key, value));
+        if (data[indexFromHashFunc] != null) {
+            for (int i = 0; i < data[indexFromHashFunc].size(); i++) {
+                if (isKeysEquals(data[indexFromHashFunc].get(i), key)) {
+                    data[indexFromHashFunc].get(i).setValue(value);
+                    return true;
+                }
             }
-            return true;
+            data[indexFromHashFunc].add(new Item<>(key, value));
+        } else {
+            data[indexFromHashFunc] = new ArrayList<>();
+            data[indexFromHashFunc].add(new Item<>(key, value));
+            size++;
         }
-
-        data[indexFromHashFunc] = new ArrayList<>();
-        data[indexFromHashFunc].add(new Item<>(key, value));
-        size++;
-
         return true;
     }
 
@@ -118,14 +114,12 @@ public class HashTableImpl <K, V> implements HashTable<K, V>{
             for (int i = 0; i < data[indexFromHashFunc].size(); i++) {
 
                 if (isKeysEquals(data[indexFromHashFunc].get(i), key)) {
-                    int[] result = {indexFromHashFunc,i};
-                    return result;
+                    return new int[]{indexFromHashFunc,i};
 
                 }
             }
         }
-        int[] result = {-1,-1};
-        return result;
+        return new int[]{-1,-1};
     }
 
     @Override
@@ -136,6 +130,9 @@ public class HashTableImpl <K, V> implements HashTable<K, V>{
         }
         Item<K, V> removed = data[index[0]].get(index[1]);
         data[index[0]].remove(index[1]);
+        if (data[index[0]].size() == 0) {
+            data[index[0]] = null;
+        }
         return removed.getValue();
     }
 

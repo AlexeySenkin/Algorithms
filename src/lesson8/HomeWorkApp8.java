@@ -11,8 +11,6 @@ public class HomeWorkApp8 {
         hashTable.put(new Product(51, "Milk"), 120); //2
         hashTable.put(new Product(21, "Potato"), 67); //3
 
-
-
         System.out.println("Size is " + hashTable.size());
         hashTable.display();
 
@@ -23,6 +21,7 @@ public class HomeWorkApp8 {
         System.out.println("Удаляем Potato и Banana");
         hashTable.remove(new Product(21, "Potato"));
         hashTable.remove(new Product(77, "Banana"));
+
 
         System.out.println("Cost potato is " + hashTable.get(new Product(21, "Potato")));
         System.out.println("Cost banana is " + hashTable.get(new Product(77, "Banana")));
